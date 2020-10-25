@@ -49,7 +49,7 @@ cfg = __C
 __C.GLOBAL_RANK = 0
 __C.EPOCH = 0
 # Absolute path to a location to keep some large files, not in this dir.
-__C.ASSETS_PATH = '/clt/nvidia-assert'
+__C.ASSETS_PATH = '/home/chulutao/nvidia-assert'
 
 # Use class weighted loss per batch to increase loss for low pixel count classes per batch
 __C.BATCH_WEIGHTING = False
@@ -77,7 +77,7 @@ __C.DATASET = AttrDict()
 #Cityscapes Dir Location
 # __C.DATASET.CITYSCAPES_DIR = \
 #   os.path.join(__C.ASSETS_PATH, 'data/Cityscapes')
-__C.DATASET.CITYSCAPES_DIR = '/clt/dataset/cityscapes-for-nvidia'
+__C.DATASET.CITYSCAPES_DIR = '/home/chulutao/dataset/cityscapes-for-nvidia'
 __C.DATASET.CITYSCAPES_CUSTOMCOARSE = \
   os.path.join(__C.ASSETS_PATH, 'data/Cityscapes/autolabelled')
 __C.DATASET.CENTROID_ROOT = \

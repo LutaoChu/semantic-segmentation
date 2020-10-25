@@ -36,7 +36,7 @@ import sys
 import time
 import torch
 
-# from apex import amp
+from apex import amp
 from runx.logx import logx
 from config import assert_and_infer_cfg, update_epoch, cfg
 from utils.misc import AverageMeter, prep_experiment, eval_metrics
@@ -453,13 +453,42 @@ def main():
         if args.apex:
             train_loader.sampler.set_epoch(epoch + 1)
 
-        if epoch % args.val_freq == 0:
+        if epoch == 0:
+            pass
+        elif epoch == args.max_epoch \
+            or (epoch < args.max_epoch / 2 and epoch % (3*args.val_freq) == 0) \
+            or (epoch >= args.max_epoch / 2 and epoch % args.val_freq == 0):
             validate(val_loader, net, criterion_val, optim, epoch)
-
+            
+#         save_dict = {
+#             'epoch': epoch,
+#             'arch': args.arch,
+#             'num_classes': cfg.DATASET_INST.num_classes,
+#             'state_dict': net.state_dict(),
+#             'optimizer': optim.state_dict(),
+#             'mean_iu': mean_iu,
+#             'command': ' '.join(sys.argv[1:])
+#         }
+#         # Save out current model
+#         self.save_ckpt_fn = os.path.join(
+#             self.logdir, 'last_checkpoint_ep{}.pth'.format(epoch))
+#         torch.save(save_dict, self.save_ckpt_fn)
+    
         scheduler.step()
 
         if check_termination(epoch):
             return 0
+
+def calculate_eta(remaining_step, speed):
+    if remaining_step < 0:
+        remaining_step = 0
+    remaining_time = int(remaining_step * speed)
+    result = "{:0>2}:{:0>2}:{:0>2}"
+    arr = []
+    for i in range(2, -1, -1):
+        arr.append(int(remaining_time / 60 ** i))
+        remaining_time %= 60 ** i
+    return result.format(*arr)
 
 
 def train(train_loader, net, optim, curr_epoch):
@@ -515,11 +544,14 @@ def train(train_loader, net, optim, curr_epoch):
         else:
             batchtime = 0
 
+        remain_iters = (args.max_epoch - curr_epoch + 1) * len(train_loader) - i - 1
+        eta = calculate_eta(remain_iters, batchtime)
+        
         msg = ('[epoch {}], [iter {} / {}], [train main loss {:0.6f}],'
-               ' [lr {:0.6f}] [batchtime {:0.3g}]')
+               ' [lr {:0.6f}] [batchtime {:0.3g}] | ETA {}')
         msg = msg.format(
             curr_epoch, i + 1, len(train_loader), train_main_loss.avg,
-            optim.param_groups[-1]['lr'], batchtime)
+            optim.param_groups[-1]['lr'], batchtime, eta)
         logx.msg(msg)
 
         metrics = {'loss': train_main_loss.avg,
