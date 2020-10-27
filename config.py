@@ -78,8 +78,9 @@ __C.DATASET = AttrDict()
 # __C.DATASET.CITYSCAPES_DIR = \
 #   os.path.join(__C.ASSETS_PATH, 'data/Cityscapes')
 __C.DATASET.CITYSCAPES_DIR = '/home/chulutao/dataset/cityscapes-for-nvidia'
-__C.DATASET.CITYSCAPES_CUSTOMCOARSE = \
-  os.path.join(__C.ASSETS_PATH, 'data/Cityscapes/autolabelled')
+# __C.DATASET.CITYSCAPES_CUSTOMCOARSE = \
+#   os.path.join(__C.ASSETS_PATH, 'data/Cityscapes/autolabelled')
+__C.DATASET.CITYSCAPES_CUSTOMCOARSE = '/home/chulutao/dataset/cityscapes-for-nvidia/autolabelled'
 __C.DATASET.CENTROID_ROOT = \
   os.path.join(__C.ASSETS_PATH, 'uniform_centroids')
 #SDC Augmented Cityscapes Dir Location

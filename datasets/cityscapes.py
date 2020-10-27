@@ -197,7 +197,11 @@ class Loader(BaseLoader):
         for city in cities:
             img_dir = '{root}/{city}'.format(root=img_root, city=city)
             for file_name in os.listdir(img_dir):
+                if file_name == '.ipynb_checkpoints':
+                    continue
                 basename, ext = os.path.splitext(file_name)
+                #print(file_name)
+                #print('ext:{}, img_ext:{}'.format(ext, img_ext))
                 assert ext == '.' + img_ext, '{} {}'.format(ext, img_ext)
                 full_img_fn = os.path.join(img_dir, file_name)
                 basename, ext = file_name.split('_leftImg8bit')

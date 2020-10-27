@@ -54,9 +54,10 @@ sys.path.append(os.environ.get('SUBMIT_SCRIPTS', '.'))
 AutoResume = None
 try:
     from userlib.auto_resume import AutoResume
+    print('sucessfully import autoresume')
 except ImportError:
-    print(AutoResume)
-
+#     print(AutoResume)
+    print('fail to import autoresume')
 
 # Argument Parser
 parser = argparse.ArgumentParser(description='Semantic Segmentation')
@@ -455,7 +456,7 @@ def main():
 
         if epoch == 0:
             pass
-        elif epoch == args.max_epoch \
+        elif epoch == args.max_epoch - 1 \
             or (epoch < args.max_epoch / 2 and epoch % (3*args.val_freq) == 0) \
             or (epoch >= args.max_epoch / 2 and epoch % args.val_freq == 0):
             validate(val_loader, net, criterion_val, optim, epoch)
